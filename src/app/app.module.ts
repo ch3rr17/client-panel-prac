@@ -23,17 +23,24 @@ import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ClientService } from './services/client.service';
+import { AuthService } from './services/auth.service';
+import { SettingsService } from './services/settings.service';
+
+import { AuthGuard } from './guards/auth.guard';
+import { RegisterGuard } from './guards/register.guard';
 
 // Create Routes
 const appRoutes: Routes =
 [
   {
     path: '',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [RegisterGuard]
   },
   {
     path: 'login',
@@ -41,15 +48,18 @@ const appRoutes: Routes =
   },
   {
     path: 'add-client',
-    component: AddClientComponent
+    component: AddClientComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'client/:id',
-    component: ClientDetailsComponent
+    component: ClientDetailsComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'edit-client/:id',
-    component: EditClientComponent
+    component: EditClientComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
@@ -79,7 +89,11 @@ const appRoutes: Routes =
   providers: [
     AngularFireDatabase,
     AngularFireDatabaseModule,
-    ClientService
+    ClientService,
+    AuthService,
+    SettingsService,
+    AuthGuard,
+    RegisterGuard
   ],
   bootstrap: [AppComponent]
 })
